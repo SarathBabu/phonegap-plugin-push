@@ -56,7 +56,7 @@ class PushNotification {
   /**
    * Unregister from push notifications
    */
-  unregister(successCallback, errorCallback = () => {}, options) {
+  unregister(successCallback, errorCallback = () => { }, options) {
     if (typeof errorCallback !== 'function') {
       console.log('PushNotification.unregister failure: failure parameter not a function');
       return;
@@ -90,7 +90,7 @@ class PushNotification {
    * @param   {Function}    errorCallback       error callback
    * @return  {void}
    */
-  subscribe(topic, successCallback, errorCallback = () => {}) {
+  subscribe(topic, successCallback, errorCallback = () => { }) {
     if (typeof errorCallback !== 'function') {
       console.log('PushNotification.subscribe failure: failure parameter not a function');
       return;
@@ -113,7 +113,7 @@ class PushNotification {
    * @param   {Function}    errorCallback       error callback
    * @return  {void}
    */
-  unsubscribe(topic, successCallback, errorCallback = () => {}) {
+  unsubscribe(topic, successCallback, errorCallback = () => { }) {
     if (typeof errorCallback !== 'function') {
       console.log('PushNotification.unsubscribe failure: failure parameter not a function');
       return;
@@ -132,11 +132,11 @@ class PushNotification {
   /**
    * Call this to set the application icon badge
    */
-  setApplicationIconBadgeNumber(successCallback, errorCallback = () => {}, badge) {
+  setApplicationIconBadgeNumber(successCallback, errorCallback = () => { }, badge) {
     if (typeof errorCallback !== 'function') {
       console.log(
         'PushNotification.setApplicationIconBadgeNumber failure: failure '
-          + 'parameter not a function',
+        + 'parameter not a function',
       );
       return;
     }
@@ -144,7 +144,7 @@ class PushNotification {
     if (typeof successCallback !== 'function') {
       console.log(
         'PushNotification.setApplicationIconBadgeNumber failure: success '
-          + 'callback parameter must be a function',
+        + 'callback parameter must be a function',
       );
       return;
     }
@@ -158,11 +158,11 @@ class PushNotification {
    * Get the application icon badge
    */
 
-  getApplicationIconBadgeNumber(successCallback, errorCallback = () => {}) {
+  getApplicationIconBadgeNumber(successCallback, errorCallback = () => { }) {
     if (typeof errorCallback !== 'function') {
       console.log(
         'PushNotification.getApplicationIconBadgeNumber failure: failure '
-          + 'parameter not a function',
+        + 'parameter not a function',
       );
       return;
     }
@@ -170,7 +170,7 @@ class PushNotification {
     if (typeof successCallback !== 'function') {
       console.log(
         'PushNotification.getApplicationIconBadgeNumber failure: success '
-          + 'callback parameter must be a function',
+        + 'callback parameter must be a function',
       );
       return;
     }
@@ -182,7 +182,7 @@ class PushNotification {
    * Clear all notifications
    */
 
-  clearAllNotifications(successCallback = () => {}, errorCallback = () => {}) {
+  clearAllNotifications(successCallback = () => { }, errorCallback = () => { }) {
     if (typeof errorCallback !== 'function') {
       console.log(
         'PushNotification.clearAllNotifications failure: failure parameter not a function',
@@ -193,7 +193,7 @@ class PushNotification {
     if (typeof successCallback !== 'function') {
       console.log(
         'PushNotification.clearAllNotifications failure: success callback '
-          + 'parameter must be a function',
+        + 'parameter must be a function',
       );
       return;
     }
@@ -202,17 +202,67 @@ class PushNotification {
   }
 
   /**
+     * Get the application icon badge
+     */
+
+  getNotificationCount(successCallback, errorCallback = () => { }) {
+    if (typeof errorCallback !== 'function') {
+      console.log(
+        'PushNotification.getNotificationCount failure: failure '
+        + 'parameter not a function',
+      );
+      return;
+    }
+
+    if (typeof successCallback !== 'function') {
+      console.log(
+        'PushNotification.getNotificationCount failure: success '
+        + 'callback parameter must be a function',
+      );
+      return;
+    }
+
+    exec(successCallback, errorCallback, 'PushNotification', 'getNotificationCount', []);
+  }
+
+
+  /**
+   * Get the application icon badge
+   */
+
+  clearNotificationCount(successCallback, errorCallback = () => { }) {
+    if (typeof errorCallback !== 'function') {
+      console.log(
+        'PushNotification.clearNotificationCount failure: failure '
+        + 'parameter not a function',
+      );
+      return;
+    }
+
+    if (typeof successCallback !== 'function') {
+      console.log(
+        'PushNotification.clearNotificationCount failure: success '
+        + 'callback parameter must be a function',
+      );
+      return;
+    }
+
+    exec(successCallback, errorCallback, 'PushNotification', 'clearNotificationCount', []);
+  }
+
+
+  /**
    * Clears notifications that have the ID specified.
    * @param  {Function} [successCallback] Callback function to be called on success.
    * @param  {Function} [errorCallback] Callback function to be called when an error is encountered.
    * @param  {Number} id    ID of the notification to be removed.
    */
-  clearNotification(successCallback = () => {}, errorCallback = () => {}, id) {
+  clearNotification(successCallback = () => { }, errorCallback = () => { }, id) {
     const idNumber = parseInt(id, 10);
     if (Number.isNaN(idNumber) || idNumber > Number.MAX_SAFE_INTEGER || idNumber < 0) {
       console.log(
         'PushNotification.clearNotification failure: id parameter must'
-          + 'be a valid integer.',
+        + 'be a valid integer.',
       );
       return;
     }
@@ -287,7 +337,7 @@ class PushNotification {
     return true;
   }
 
-  finish(successCallback = () => {}, errorCallback = () => {}, id = 'handler') {
+  finish(successCallback = () => { }, errorCallback = () => { }, id = 'handler') {
     if (typeof successCallback !== 'function') {
       console.log('finish failure: success callback parameter must be a function');
       return;

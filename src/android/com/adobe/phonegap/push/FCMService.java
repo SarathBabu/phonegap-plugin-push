@@ -32,6 +32,10 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,6 +73,43 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
   }
 
   @Override
+  public void onNewToken(String s) {
+    sendRegistrationToServer(s);
+  }
+
+  private void sendRegistrationToServer(String refreshedToken)
+    {
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("com.adobe.phonegap.push", 0);
+        String tokendata = pref.getString("loginToken", null);
+        if(tokendata!=null && !tokendata.isEmpty()){
+
+            OkHttpClient client = new OkHttpClient();
+
+            String getUrl = "https://smartstops.net/WebServices/MobileService.asmx/SetDeviceToken?callback=?"
+            + "&token=" + tokendata
+            + "&deviceType=Android"
+            + "&deviceToken=" + refreshedToken;
+
+            Request request = new Request.Builder()
+                    .url(getUrl)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    Log.d("TAG",response.body().string());
+                }
+            });
+        }
+    }
+
+  @Override
   public void onMessageReceived(RemoteMessage message) {
 
     String from = message.getFrom();
@@ -96,6 +137,10 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
       boolean clearBadge = prefs.getBoolean(CLEAR_BADGE, false);
       String messageKey = prefs.getString(MESSAGE_KEY, MESSAGE);
       String titleKey = prefs.getString(TITLE_KEY, TITLE);
+
+      int currentCount = prefs.getInt(COUNT_RECEIVED,0);
+      prefs.edit().putInt(COUNT_RECEIVED, currentCount + 1).apply();
+      extras.putString(COUNT, String.valueOf(currentCount + 1));
 
       extras = normalizeExtras(applicationContext, extras, messageKey, titleKey);
 

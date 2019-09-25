@@ -539,6 +539,29 @@
     [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
 }
 
+//Code added by Sarath
+
+- (void)getNotificationCount:(CDVInvokedUrlCommand *)command
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSInteger notificationCount = [prefs integerForKey:@"COUNT_NOTIFICATION"];
+
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:(int)notificationCount];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+}
+
+- (void)clearNotificationCount:(CDVInvokedUrlCommand *)command{
+
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setInteger:0 forKey:@"COUNT_NOTIFICATION"];
+
+    NSString* message = [NSString stringWithFormat:@"notification count has been reset"];
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:command.callbackId];
+}
+
+// Code added by Sarath ends here
+
 - (void)hasPermission:(CDVInvokedUrlCommand *)command
 {
     id<UIApplicationDelegate> appDelegate = [UIApplication sharedApplication].delegate;

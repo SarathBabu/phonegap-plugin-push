@@ -60,6 +60,11 @@
 - (void)subscribe:(CDVInvokedUrlCommand*)command;
 - (void)unsubscribe:(CDVInvokedUrlCommand*)command;
 - (void)clearNotification:(CDVInvokedUrlCommand*)command;
+// Code added by Sarath
+- (void)getNotificationCount:(CDVInvokedUrlCommand *)command;
+- (void)clearNotificationCount:(CDVInvokedUrlCommand *)command;
+// Code added by Sarath ends here
+
 
 - (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
 - (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error;
@@ -70,6 +75,8 @@
 - (void)willSendDataMessageWithID:(NSString *)messageID error:(NSError *)error;
 - (void)didSendDataMessageWithID:(NSString *)messageID;
 - (void)didDeleteMessagesOnServer;
+
+
 
 // VoIP Features
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(NSString *)type;

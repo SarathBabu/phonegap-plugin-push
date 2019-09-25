@@ -63,6 +63,8 @@ public interface PushConstants {
   public static final String SET_APPLICATION_ICON_BADGE_NUMBER = "setApplicationIconBadgeNumber";
   public static final String GET_APPLICATION_ICON_BADGE_NUMBER = "getApplicationIconBadgeNumber";
   public static final String CLEAR_ALL_NOTIFICATIONS = "clearAllNotifications";
+  public static final String GET_NOTIFICATION_COUNT = "getNotificationCount";
+  public static final String CLEAR_NOTIFICATION_COUNT = "clearNotificationCount";
   public static final String VISIBILITY = "visibility";
   public static final String INLINE_REPLY = "inlineReply";
   public static final String INLINE_REPLY_LABEL = "replyLabel";
@@ -102,4 +104,5 @@ public interface PushConstants {
   public static final String ONGOING = "ongoing";
   public static final String LIST_CHANNELS = "listChannels";
   public static final String CLEAR_NOTIFICATION = "clearNotification";
+  public static final String COUNT_RECEIVED = "countReceived";
 }

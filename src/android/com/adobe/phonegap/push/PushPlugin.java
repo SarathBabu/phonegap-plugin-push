@@ -358,6 +358,21 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
           callbackContext.success();
         }
       });
+    } else if (GET_NOTIFICATION_COUNT.equals(action)) {
+      cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          Log.v(LOG_TAG, "getNotificationCount");
+          callbackContext.success(getNotificationCount(getApplicationContext()));
+        }
+      });
+    } else if (CLEAR_NOTIFICATION_COUNT.equals(action)) {
+      cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          Log.v(LOG_TAG, "clearNotificationCount");
+          clearNotificationCount(getApplicationContext());
+          callbackContext.success();
+        }
+      });
     } else if (SUBSCRIBE.equals(action)) {
       // Subscribing for a topic
       cordova.getThreadPool().execute(new Runnable() {
@@ -443,6 +458,25 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     return true;
   }
+
+  /*
+   * Retrives notifications count from SharedPreferences
+   */
+  public static int getNotificationCount(Context context) {
+    SharedPreferences settings = context.getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+    return settings.getInt(COUNT_RECEIVED, 0);
+  }
+  
+  /*
+    * Sets rest notification count value in SharedPreferences
+    */
+  public static void clearNotificationCount(Context context) {
+    SharedPreferences.Editor editor = context.getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE).edit();
+    editor.putInt(COUNT_RECEIVED, 0);
+    editor.apply();
+  }
+  
+  
 
   public static void sendEvent(JSONObject _json) {
     PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, _json);

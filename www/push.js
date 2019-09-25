@@ -221,6 +221,51 @@ function () {
 
       exec(successCallback, errorCallback, 'PushNotification', 'clearAllNotifications', []);
     }
+
+    /**
+     * Get the application icon badge
+     */
+
+  }, {
+    key: 'getNotificationCount',
+    value: function getNotificationCount(successCallback) {
+      var errorCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+      if (typeof errorCallback !== 'function') {
+        console.log('PushNotification.getNotificationCount failure: failure ' + 'parameter not a function');
+        return;
+      }
+
+      if (typeof successCallback !== 'function') {
+        console.log('PushNotification.getNotificationCount failure: success ' + 'callback parameter must be a function');
+        return;
+      }
+
+      exec(successCallback, errorCallback, 'PushNotification', 'getNotificationCount', []);
+    }
+
+    /**
+     * Get the application icon badge
+     */
+
+  }, {
+    key: 'clearNotificationCount',
+    value: function clearNotificationCount(successCallback) {
+      var errorCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+      if (typeof errorCallback !== 'function') {
+        console.log('PushNotification.clearNotificationCount failure: failure ' + 'parameter not a function');
+        return;
+      }
+
+      if (typeof successCallback !== 'function') {
+        console.log('PushNotification.clearNotificationCount failure: success ' + 'callback parameter must be a function');
+        return;
+      }
+
+      exec(successCallback, errorCallback, 'PushNotification', 'clearNotificationCount', []);
+    }
+
     /**
      * Clears notifications that have the ID specified.
      * @param  {Function} [successCallback] Callback function to be called on success.

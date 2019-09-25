@@ -78,14 +78,29 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
     [pushHandler didFailToRegisterForRemoteNotificationsWithError:error];
 }
 
+- (void)notificationIncrementer {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSInteger notificationCount = [prefs integerForKey:@"COUNT_NOTIFICATION"];
+    [prefs setInteger:(notificationCount+1) forKey:@"COUNT_NOTIFICATION"];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:(notificationCount+1)];
+}
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSLog(@"didReceiveNotification with fetchCompletionHandler");
 
+    // app is in the foreground so call notification callback
+    if (application.applicationState == UIApplicationStateActive) {
+        NSLog(@"app active");
+        PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
+        pushHandler.notificationMessage = userInfo;
+        pushHandler.isInline = YES;
+        [pushHandler notificationReceived];
+    }
     // app is in the background or inactive, so only call notification callback if this is a silent push
     if (application.applicationState != UIApplicationStateActive) {
 
         NSLog(@"app in-active");
-
+               
         // do some convoluted logic to find out if this should be a silent push.
         long silent = 0;
         id aps = [userInfo objectForKey:@"aps"];
@@ -96,6 +111,7 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
             silent = [contentAvailable integerValue];
         }
 
+       
         if (silent == 1) {
             NSLog(@"this should be a silent push");
             void (^safeHandler)(UIBackgroundFetchResult) = ^(UIBackgroundFetchResult result){
@@ -147,6 +163,8 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
             case UNAuthorizationStatusAuthorized:
                 completionHandler(YES);
                 break;
+            case UNAuthorizationStatusProvisional:
+                break;
         }
     }];
 }
@@ -191,6 +209,7 @@ NSString *const pushPluginApplicationDidBecomeActiveNotification = @"pushPluginA
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
     NSLog( @"NotificationCenter Handle push from foreground" );
+
     // custom code to handle push while app is in the foreground
     PushPlugin *pushHandler = [self getCommandInstance:@"PushNotification"];
     pushHandler.notificationMessage = notification.request.content.userInfo;
@@ -206,6 +225,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 {
     NSLog(@"Push Plugin didReceiveNotificationResponse: actionIdentifier %@, notification: %@", response.actionIdentifier,
           response.notification.request.content.userInfo);
+
     NSMutableDictionary *userInfo = [response.notification.request.content.userInfo mutableCopy];
     [userInfo setObject:response.actionIdentifier forKey:@"actionCallback"];
     NSLog(@"Push Plugin userInfo %@", userInfo);
@@ -229,6 +249,9 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         }
         case UIApplicationStateBackground:
         {
+
+            [self notificationIncrementer];
+            
             void (^safeHandler)(void) = ^(void){
                 dispatch_async(dispatch_get_main_queue(), ^{
                     completionHandler();
